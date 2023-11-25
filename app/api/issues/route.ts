@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import prisma from "@/prisma/client";
-import { json } from "node:stream/consumers";
 
 const createIssuesSchema = z.object({
   title: z.string().min(1).max(255),

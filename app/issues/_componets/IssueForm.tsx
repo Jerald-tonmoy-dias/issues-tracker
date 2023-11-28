@@ -38,6 +38,7 @@ export default function IssueForm({ issue }: { issue?: Issue }) {
       if (issue) await axios.patch(`/api/issues/${issue.id}`, data);
       else await axios.post("/api/issues", data);
       router.push("/issues");
+      router.refresh();
     } catch (error) {
       setisSubmitting(false);
       setError("An unexpected error occured");

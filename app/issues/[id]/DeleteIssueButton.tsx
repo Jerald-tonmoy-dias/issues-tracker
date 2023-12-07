@@ -1,32 +1,34 @@
 "use client";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
-import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { Spinner } from "@/app/components";
 
 export default function DeleteIssueButton({ issueId }: { issueId: number }) {
   const [error, setError] = useState(false);
+  const [isDeleting, setisDeleting] = useState(false);
   const router = useRouter();
 
   const deleteIssue = async () => {
     try {
+      setisDeleting(true);
       await axios.delete(`/api/issues/${issueId}`);
       router.push("/issues");
       router.refresh();
     } catch (error) {
       setError(true);
+      setisDeleting(false);
     }
   };
   return (
     <>
       <AlertDialog.Root>
         <AlertDialog.Trigger>
-          <Button color="red">
+          <Button disabled={isDeleting} color="red">
             Delete
-            {/* <Pencil2Icon />
-          <Link href={`/issues/${issueId}/edit`}> Delete Issues</Link> */}
+            {isDeleting && <Spinner />}
           </Button>
         </AlertDialog.Trigger>
         <AlertDialog.Content>
@@ -43,6 +45,7 @@ export default function DeleteIssueButton({ issueId }: { issueId: number }) {
             <AlertDialog.Action>
               <Button onClick={deleteIssue} color="red">
                 Delete Issue
+                {isDeleting && <Spinner />}
               </Button>
             </AlertDialog.Action>
           </Flex>
